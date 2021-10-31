@@ -12,5 +12,11 @@ Dodałem do projektu importowalny config do Postmana, w którym przygotowane są
 
 W celu uruchomienia należy odpowiednio skonfigurować plik .env:
 * SECRET_KEY - klucz potrzebny do enkrypcji
-* LOGIN - adres email, z którego wysyłane będą wiadomości
+* LOGIN - adres email, z którego wysyłane będą wiadomości (w przypadku gmaila trzeba włączyć opcję insecure apps)
 * PW - hasło do email-a
+
+Wartości tych zmiennych mogę podać w wiadomości prywatnej
+
+Najważniejsze TODO:
+* ogólna enkapsulacja i refaktoryzacja kodu
+* dodanie timera resetującego status rezerwacji przy zaprzestanej próbie anulowania
