@@ -1,0 +1,269 @@
+{
+	"info": {
+		"_postman_id": "49b63d8b-14ad-4084-ba61-f5474995fe48",
+		"name": "Rekrutacja Solvro",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Reservations GET",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/reservations/?date={{date}}",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"reservations",
+						""
+					],
+					"query": [
+						{
+							"key": "date",
+							"value": "{{date}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reservations POST",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "table",
+							"value": "{{table}}",
+							"description": "Table ID",
+							"type": "text"
+						},
+						{
+							"key": "numberOfSeats",
+							"value": "{{numberOfSeats}}",
+							"description": "Number of seats",
+							"type": "text"
+						},
+						{
+							"key": "dateBegin",
+							"value": "{{dateBeginBody}}",
+							"description": "Time the reservation begins at",
+							"type": "text"
+						},
+						{
+							"key": "dateFinish",
+							"value": "{{dateFinishBody}}",
+							"description": "Time the reservation ends at",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "{{email}}",
+							"description": "Client's email",
+							"type": "text"
+						},
+						{
+							"key": "fullName",
+							"value": "{{fullName}}",
+							"description": "Client's name",
+							"type": "text"
+						},
+						{
+							"key": "phone",
+							"value": "{{phone}}",
+							"description": "Client's phone number",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/reservations/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"reservations",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reservations/<id> PUT",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/reservations/{{ID}}/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"reservations",
+						"{{ID}}",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reservations/<id> DELETE",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/reservations/{{ID}}/?verificationCode={{verificationCode}}",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"reservations",
+						"{{ID}}",
+						""
+					],
+					"query": [
+						{
+							"key": "verificationCode",
+							"value": "{{verificationCode}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Tables GET",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/tables/?dateBegin={{dateBeginParam}}&dateFinish={{dateFinishParam}}&numberOfSeats={{numberOfSeats}}",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"tables",
+						""
+					],
+					"query": [
+						{
+							"key": "dateBegin",
+							"value": "{{dateBeginParam}}"
+						},
+						{
+							"key": "dateFinish",
+							"value": "{{dateFinishParam}}"
+						},
+						{
+							"key": "numberOfSeats",
+							"value": "{{numberOfSeats}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "ID",
+			"value": "12"
+		},
+		{
+			"key": "table",
+			"value": "1"
+		},
+		{
+			"key": "numberOfSeats",
+			"value": "10"
+		},
+		{
+			"key": "date",
+			"value": "2021-11-01"
+		},
+		{
+			"key": "dateBeginBody",
+			"value": "2021-11-01T18:30:00+02:00"
+		},
+		{
+			"key": "dateFinishBody",
+			"value": "2021-11-01T20:00:00+02:00"
+		},
+		{
+			"key": "dateBeginParam",
+			"value": "2021-11-01T18:30:00%2B02:00"
+		},
+		{
+			"key": "dateFinishParam",
+			"value": "2021-11-01T19:30:00%2B02:00"
+		},
+		{
+			"key": "email",
+			"value": "daveops418@gmail.com"
+		},
+		{
+			"key": "fullName",
+			"value": "John Doe"
+		},
+		{
+			"key": "phone",
+			"value": "123456789"
+		},
+		{
+			"key": "verificationCode",
+			"value": "039669"
+		}
+	]
+}
