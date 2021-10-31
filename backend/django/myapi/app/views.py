@@ -17,8 +17,10 @@ def reservations(request):
     if request.method == 'GET':
         # TODO: add some sort of authentication so only the restaurant's stuff can access the data
         params = request.query_params
+
         # here's a default value for queried date (only valid if no parameter is given in request)
         queryDateBegin = datetime.date.today()
+
         # TODO: clean up this mess and get rid of try..except
         if params is not None and 'date' in params.keys():
             # check if client sent a valid date in valid format
@@ -30,6 +32,7 @@ def reservations(request):
                 return Response("Incorrect date",status=status.HTTP_400_BAD_REQUEST)
             else:
                 queryDateBegin = date.date()
+
         reservations_list = Reservation.objects.filter(dateBegin__date=queryDateBegin)
         serializer = ReservationGetSerializer(reservations_list, many=True, context={'request': request})
         return Response(serializer.data)
@@ -47,9 +50,8 @@ def reservations(request):
 
             # check if dates are in correct order
             if data['dateBegin'] >= data['dateFinish']:
-                return Response("You can't finish the reservation before it even begins!",
-                    # TODO: make sure if 406 is the correct code, might need to change to 400
-                    status=status.HTTP_406_NOT_ACCEPTABLE)
+                # TODO: make sure if 406 is the correct code, might need to change to 400
+                return Response("You can't finish the reservation before it even begins!", status=status.HTTP_406_NOT_ACCEPTABLE)
             if data['dateBegin'] < timezone.now():
                 return Response("You can't reserve a table in the past!", status=status.HTTP_406_NOT_ACCEPTABLE)
 
@@ -68,7 +70,7 @@ def reservations(request):
 
             serializer.save()
             try:
-                # TODO: Clean this absolutely terrible line of code
+                # TODO: Clean this line \/
                 res_id = Reservation.objects.get(table=data['table'], dateBegin=data['dateBegin']).reservationID 
                 print(res_id)
                 send_mail(serializer.validated_data['email'], 
@@ -85,19 +87,32 @@ def reservation_cancel(request, res_id):
     # reservations/<id> PUT
     #
     if request.method == 'PUT':
+
+        # check if the ID is correct
+        if res_id not in [x[0] for x in Reservation.objects.values_list('reservationID')]:
+            return Response("Incorrect ID", status=status.HTTP_400_BAD_REQUEST)
+
         cancelled_reservation = Reservation.objects.get(reservationID=res_id)
         request_date = timezone.now()
+
+        # check if the request was sent at least 2 hours before the actual reservation
         if (cancelled_reservation.dateBegin + datetime.timedelta(hours=2)) < request_date:
             return Response("Too late!", status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        # check if the reservation is not already under cancellation
+        # TODO: IMPORTANT! Add a timer to reset the status and remove the verification code after X time
         if cancelled_reservation.status == "Requested Cancellation":
             return Response("Already in the cancellation process", status=status.HTTP_406_NOT_ACCEPTABLE)
+
         serializer = VerificationCodeSerializer(data={'timeOfCreation': timezone.now(), 'value': ''.join([random.choice('1234567890') for _ in range(6)])})
         if not serializer.is_valid():
             return Response(status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
+
         # TODO: get this object by ID (for some reason I haven't been able to figure it out yet)
         cancelled_reservation.verificationCode = VerificationCode.objects.get(timeOfCreation=serializer.data['timeOfCreation'], value=serializer.data['value'])
         cancelled_reservation.save()
+
         send_mail(cancelled_reservation.email, f"Subject: Reservation Cancellation Request\n\nYour verification code: {serializer.data['value']}")
         return Response(status=status.HTTP_200_OK)
 
@@ -105,6 +120,8 @@ def reservation_cancel(request, res_id):
     # reservations/<id> DELETE
     #
     elif request.method == 'DELETE':
+        
+        # this is the object representing the desired reservation
         cancelled_reservation = Reservation.objects.get(reservationID=res_id)
         verification_code = request.query_params['verificationCode']
         if verification_code != cancelled_reservation.verificationCode.value:
