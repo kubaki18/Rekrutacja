@@ -1,12 +1,38 @@
 from rest_framework import serializers
-from .models import Reservation, Table
+from .models import Reservation, Table, VerificationCode
 
-class ReservationSerializer(serializers.HyperlinkedModelSerializer):
+class ReservationGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation
-        fields = ('table', 'numberOfSeats', 'dateBegin', 'dateFinish')
+        fields = ('reservationID', 'table', 'numberOfSeats', 'dateBegin', 'dateFinish', 'status')
 
-class TableSerializer(serializers.HyperlinkedModelSerializer):
+class ReservationPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reservation
+        fields = ('table', 'numberOfSeats', 'dateBegin', 'dateFinish', 'email')
+
+class ReservationPutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reservation
+        fields = ('reservationID', 'dateBegin',
+                'status', 'email')
+
+class ReservationDeleteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reservation
+        fields = ['reservationID', 'verificationCode']
+
+class VerificationCodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VerificationCode
+        fields = ['timeOfCreation', 'value']
+
+class TableSerializer(serializers.ModelSerializer):
     class Meta:
         model = Table
         fields = ('number', 'minNumberOfSeats', 'maxNumberOfSeats')
+
+class ParamsSerializer(serializers.Serializer):
+    dateBegin = serializers.DateTimeField()
+    dateFinish = serializers.DateTimeField()
+    numberOfSeats = serializers.IntegerField()
