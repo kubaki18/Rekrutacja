@@ -1,4 +1,4 @@
-#Dokumentacja
+# Dokumentacja
 
 Aplikacja napisana w Pythonie za pomocą frameworka Django.
 Opiera się na bazie danych SQLite.
